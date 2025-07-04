@@ -1,0 +1,17 @@
+{
+  "greeting": "Hello, 世界! 🌍",
+  "languages": {
+    "english": "Hello World",
+    "japanese": "こんにちは世界",
+    "arabic": "مرحبا بالعالم",
+    "russian": "Привет мир",
+    "emoji": "👋 🌏"
+  },
+  "special_chars": {
+    "hearts": "♥️ ❤️ 💕",
+    "arrows": "← → ↑ ↓",
+    "math": "∑ ∏ ∞ √ ≈ ≠",
+    "currency": "€ £ ¥ ₹ ₽"
+  },
+  "escaped": "Line 1\nLine 2\tTabbed\rCarriage\"Quoted\""
+}
