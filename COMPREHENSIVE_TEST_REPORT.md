@@ -160,7 +160,353 @@ This comprehensive report consolidates all testing activities conducted on the J
 
 ## 📊 Before/After Examples
 
-### Example 1: Basic Prettification
+### Example 1: Kubernetes Deployment - Real-World Complexity
+
+**Before (Ugly Kubernetes JSON):**
+```json
+{"apiVersion":"v1","kind":"Deployment","metadata":{"name":"nginx-deployment","namespace":"default","labels":{"app":"nginx","tier":"frontend"},"annotations":{"deployment.kubernetes.io/revision":"1"}},"spec":{"replicas":3,"selector":{"matchLabels":{"app":"nginx"}},"template":{"metadata":{"labels":{"app":"nginx","tier":"frontend"}},"spec":{"containers":[{"name":"nginx","image":"nginx:1.14.2","ports":[{"containerPort":80,"protocol":"TCP"}],"resources":{"limits":{"memory":"512Mi","cpu":"500m"},"requests":{"memory":"256Mi","cpu":"250m"}},"livenessProbe":{"httpGet":{"path":"/","port":80},"initialDelaySeconds":30,"timeoutSeconds":5,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"readinessProbe":{"httpGet":{"path":"/","port":80},"initialDelaySeconds":5,"timeoutSeconds":1,"periodSeconds":10,"successThreshold":1,"failureThreshold":3},"env":[{"name":"ENVIRONMENT","value":"production"},{"name":"VERSION","value":"1.0.0"}],"volumeMounts":[{"name":"config-volume","mountPath":"/etc/config"}]}],"volumes":[{"name":"config-volume","configMap":{"name":"nginx-config"}}]}},"strategy":{"type":"RollingUpdate","rollingUpdate":{"maxUnavailable":1,"maxSurge":1}},"status":{"availableReplicas":3,"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2023-01-01T00:00:00Z","reason":"MinimumReplicasAvailable","message":"Deployment has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2023-01-01T00:00:00Z","reason":"NewReplicaSetAvailable","message":"ReplicaSet \"nginx-deployment-12345\" has successfully progressed."}],"observedGeneration":1,"readyReplicas":3,"replicas":3,"updatedReplicas":3}}
+```
+
+**After (Prettified with 2-space indentation and key sorting):**
+```json
+{
+  "apiVersion": "v1",
+  "kind": "Deployment",
+  "metadata": {
+    "annotations": {
+      "deployment.kubernetes.io/revision": "1"
+    },
+    "labels": {
+      "app": "nginx",
+      "tier": "frontend"
+    },
+    "name": "nginx-deployment",
+    "namespace": "default"
+  },
+  "spec": {
+    "replicas": 3,
+    "selector": {
+      "matchLabels": {
+        "app": "nginx"
+      }
+    },
+    "strategy": {
+      "rollingUpdate": {
+        "maxSurge": 1,
+        "maxUnavailable": 1
+      },
+      "type": "RollingUpdate"
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "nginx",
+          "tier": "frontend"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "env": [
+              {
+                "name": "ENVIRONMENT",
+                "value": "production"
+              },
+              {
+                "name": "VERSION",
+                "value": "1.0.0"
+              }
+            ],
+            "image": "nginx:1.14.2",
+            "livenessProbe": {
+              "httpGet": {
+                "path": "/",
+                "port": 80
+              },
+              "initialDelaySeconds": 30,
+              "periodSeconds": 10,
+              "successThreshold": 1,
+              "timeoutSeconds": 5,
+              "failureThreshold": 3
+            },
+            "name": "nginx",
+            "ports": [
+              {
+                "containerPort": 80,
+                "protocol": "TCP"
+              }
+            ],
+            "readinessProbe": {
+              "httpGet": {
+                "path": "/",
+                "port": 80
+              },
+              "initialDelaySeconds": 5,
+              "periodSeconds": 10,
+              "successThreshold": 1,
+              "timeoutSeconds": 1,
+              "failureThreshold": 3
+            },
+            "resources": {
+              "limits": {
+                "cpu": "500m",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "256Mi"
+              }
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/etc/config",
+                "name": "config-volume"
+              }
+            ]
+          }
+        ],
+        "volumes": [
+          {
+            "configMap": {
+              "name": "nginx-config"
+            },
+            "name": "config-volume"
+          }
+        ]
+      }
+    }
+  }
+}
+```
+
+### Example 2: E-commerce Data with Complex Nested Structures
+
+**Before (Ugly E-commerce JSON):**
+```json
+{"products":[{"id":"PROD-001","name":"Wireless Bluetooth Headphones","description":"High-quality wireless headphones with noise cancellation","category":"Electronics","price":99.99,"currency":"USD","inventory":150,"attributes":{"color":["Black","White","Blue"],"weight":"250g","battery_life":"30 hours","connectivity":"Bluetooth 5.0","features":["Noise Cancellation","Wireless Charging","Voice Assistant"]},"images":["https://example.com/images/headphones1.jpg","https://example.com/images/headphones2.jpg"],"tags":["wireless","audio","bluetooth","noise-cancelling"],"reviews":[{"user":"john_doe","rating":5,"comment":"Amazing sound quality!","date":"2023-12-01"},{"user":"jane_smith","rating":4,"comment":"Good but a bit expensive","date":"2023-11-28"}],"variants":[{"sku":"PROD-001-BLK","color":"Black","price":99.99,"inventory":50},{"sku":"PROD-001-WHT","color":"White","price":99.99,"inventory":60},{"sku":"PROD-001-BLU","color":"Blue","price":104.99,"inventory":40}],"created_at":"2023-01-15T10:30:00Z","updated_at":"2023-12-01T14:20:00Z"}],"customers":[{"id":"CUST-001","name":"John Doe","email":"john@example.com","phone":"+1-555-0123","address":{"street":"123 Main St","city":"Anytown","state":"CA","zip":"12345","country":"USA"},"orders":[{"order_id":"ORD-001","date":"2023-12-01","total":129.99,"items":[{"product_id":"PROD-001","quantity":1,"price":99.99},{"product_id":"PROD-002","quantity":1,"price":30.00}],"status":"completed"}],"loyalty_points":1250,"created_at":"2023-01-10T08:00:00Z"}],"metadata":{"total_products":1,"total_customers":1,"total_orders":1,"generated_at":"2023-12-10T12:00:00Z"}}
+```
+
+**After (Prettified with 4-space indentation and statistics):**
+```json
+{
+    "customers": [
+        {
+            "address": {
+                "city": "Anytown",
+                "country": "USA",
+                "state": "CA",
+                "street": "123 Main St",
+                "zip": "12345"
+            },
+            "created_at": "2023-01-10T08:00:00Z",
+            "email": "john@example.com",
+            "id": "CUST-001",
+            "loyalty_points": 1250,
+            "name": "John Doe",
+            "orders": [
+                {
+                    "date": "2023-12-01",
+                    "items": [
+                        {
+                            "price": 99.99,
+                            "product_id": "PROD-001",
+                            "quantity": 1
+                        },
+                        {
+                            "price": 30.0,
+                            "product_id": "PROD-002",
+                            "quantity": 1
+                        }
+                    ],
+                    "order_id": "ORD-001",
+                    "status": "completed",
+                    "total": 129.99
+                }
+            ],
+            "phone": "+1-555-0123"
+        }
+    ],
+    "metadata": {
+        "generated_at": "2023-12-10T12:00:00Z",
+        "total_customers": 1,
+        "total_orders": 1,
+        "total_products": 1
+    },
+    "products": [
+        {
+            "attributes": {
+                "battery_life": "30 hours",
+                "color": [
+                    "Black",
+                    "White",
+                    "Blue"
+                ],
+                "connectivity": "Bluetooth 5.0",
+                "features": [
+                    "Noise Cancellation",
+                    "Wireless Charging",
+                    "Voice Assistant"
+                ],
+                "weight": "250g"
+            },
+            "category": "Electronics",
+            "created_at": "2023-01-15T10:30:00Z",
+            "currency": "USD",
+            "description": "High-quality wireless headphones with noise cancellation",
+            "id": "PROD-001",
+            "images": [
+                "https://example.com/images/headphones1.jpg",
+                "https://example.com/images/headphones2.jpg"
+            ],
+            "inventory": 150,
+            "name": "Wireless Bluetooth Headphones",
+            "price": 99.99,
+            "reviews": [
+                {
+                    "comment": "Amazing sound quality!",
+                    "date": "2023-12-01",
+                    "rating": 5,
+                    "user": "john_doe"
+                },
+                {
+                    "comment": "Good but a bit expensive",
+                    "date": "2023-11-28",
+                    "rating": 4,
+                    "user": "jane_smith"
+                }
+            ],
+            "tags": [
+                "wireless",
+                "audio",
+                "bluetooth",
+                "noise-cancelling"
+            ],
+            "updated_at": "2023-12-01T14:20:00Z",
+            "variants": [
+                {
+                    "color": "Black",
+                    "inventory": 50,
+                    "price": 99.99,
+                    "sku": "PROD-001-BLK"
+                },
+                {
+                    "color": "White",
+                    "inventory": 60,
+                    "price": 99.99,
+                    "sku": "PROD-001-WHT"
+                },
+                {
+                    "color": "Blue",
+                    "inventory": 40,
+                    "price": 104.99,
+                    "sku": "PROD-001-BLU"
+                }
+            ]
+        }
+    ]
+}
+```
+
+**Generated Statistics:**
+```
+╭─────────────────── JSON Statistics - ecommerce_data.json ────────────────────╮
+│ === JSON Statistics ===                                                      │
+│ Size: 3,208 bytes                                                            │
+│ Maximum depth: 7                                                             │
+│                                                                              │
+│ Type counts:                                                                 │
+│   Objects: 26                                                                │
+│   Arrays: 19                                                                 │
+│   Strings: 102                                                               │
+│   Numbers: 41                                                                │
+│   Booleans: 0                                                                │
+│   Nulls: 0                                                                   │
+│                                                                              │
+│ Key statistics:                                                              │
+│   Total keys: 143                                                            │
+│   Unique keys: 56                                                            │
+│                                                                              │
+│ Array statistics:                                                            │
+│   Count: 19                                                                  │
+│   Average length: 2.3                                                        │
+│   Min length: 1                                                              │
+│   Max length: 4                                                              │
+│                                                                              │
+│ String statistics:                                                           │
+│   Count: 102                                                                 │
+│   Average length: 11.9                                                       │
+│   Min length: 2                                                              │
+│   Max length: 57                                                             │
+│                                                                              │
+│ Most frequent keys:                                                          │
+│   'price': 13 occurrences                                                    │
+│   'inventory': 8 occurrences                                                 │
+│   'color': 8 occurrences                                                     │
+│   'sku': 8 occurrences                                                       │
+│   'date': 5 occurrences                                                      │
+│   'total': 5 occurrences                                                     │
+│   'product_id': 5 occurrences                                                │
+│   'quantity': 5 occurrences                                                  │
+│   'id': 4 occurrences                                                        │
+│   'created_at': 4 occurrences                                                │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```
+
+### Example 3: Application Log Data - Compact Mode
+
+**Before (Ugly Log JSON):**
+```json
+{"timestamp":"2023-12-10T15:30:45.123Z","level":"INFO","service":"api-gateway","message":"Request processed successfully","request":{"method":"POST","path":"/api/v1/users","headers":{"host":"api.example.com","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36","content-type":"application/json","authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"},"body":{"username":"newuser","email":"user@example.com","password":"hashed_password_123","profile":{"first_name":"John","last_name":"Doe","age":30,"preferences":{"theme":"dark","notifications":true,"language":"en"}}},"query_params":{"invite_code":"WELCOME123","referral":"email"},"ip":"192.168.1.100","user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},"response":{"status":201,"headers":{"content-type":"application/json","location":"/api/v1/users/12345"},"body":{"id":12345,"username":"newuser","email":"user@example.com","created_at":"2023-12-10T15:30:45.123Z","profile":{"first_name":"John","last_name":"Doe","age":30,"preferences":{"theme":"dark","notifications":true,"language":"en"}}},"duration":245,"size":512},"performance":{"cpu_usage":0.25,"memory_usage":52428800,"disk_usage":1048576,"network":{"bytes_sent":1024,"bytes_received":2048}},"security":{"auth_method":"jwt","auth_user_id":98765,"auth_scopes":["users:write"],"permissions":["create","update"],"rate_limit":{"current":5,"limit":100,"window":3600}},"context":{"trace_id":"abc123def456ghi789","span_id":"span123","request_id":"req456","session_id":"sess789","environment":"production","version":"1.2.3","region":"us-east-1","availability_zone":"us-east-1a"},"errors":[],"warnings":[],"metadata":{"service_version":"1.2.3","host":"api-gateway-01","pod":"api-gateway-01-abc123","namespace":"production","cluster":"prod-cluster-01"}}
+```
+
+**After (Compact Mode - Minified):**
+```json
+{"timestamp":"2023-12-10T15:30:45.123Z","level":"INFO","service":"api-gateway","message":"Request processed successfully","request":{"method":"POST","path":"/api/v1/users","headers":{"host":"api.example.com","user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36","content-type":"application/json","authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"},"body":{"username":"newuser","email":"user@example.com","password":"hashed_password_123","profile":{"first_name":"John","last_name":"Doe","age":30,"preferences":{"theme":"dark","notifications":true,"language":"en"}}},"query_params":{"invite_code":"WELCOME123","referral":"email"},"ip":"192.168.1.100","user_agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"},"response":{"status":201,"headers":{"content-type":"application/json","location":"/api/v1/users/12345"},"body":{"id":12345,"username":"newuser","email":"user@example.com","created_at":"2023-12-10T15:30:45.123Z","profile":{"first_name":"John","last_name":"Doe","age":30,"preferences":{"theme":"dark","notifications":true,"language":"en"}}},"duration":245,"size":512},"performance":{"cpu_usage":0.25,"memory_usage":52428800,"disk_usage":1048576,"network":{"bytes_sent":1024,"bytes_received":2048}},"security":{"auth_method":"jwt","auth_user_id":98765,"auth_scopes":["users:write"],"permissions":["create","update"],"rate_limit":{"current":5,"limit":100,"window":3600}},"context":{"trace_id":"abc123def456ghi789","span_id":"span123","request_id":"req456","session_id":"sess789","environment":"production","version":"1.2.3","region":"us-east-1","availability_zone":"us-east-1a"},"errors":[],"warnings":[],"metadata":{"service_version":"1.2.3","host":"api-gateway-01","pod":"api-gateway-01-abc123","namespace":"production","cluster":"prod-cluster-01"}}
+```
+
+### Example 4: Unicode and International Characters with Key Sorting
+
+**Before (Ugly Unicode JSON):**
+```json
+{"greeting":"こんにちは世界","emoji":["🎉","🚀","💻","🔥"],"math_symbols":{"pi":"π","omega":"Ω","infinity":"∞","degrees":"°C"},"accents":"café résumé naïve façade","currencies":["$","€","£","¥","₹"],"directional_text":{"arabic":"العربية","hebrew":"עברית"},"special_whitespace":"line1\nline2\tindented\rcarriage","escape_sequences":"quotes: \"backslash: \\newline: \ntab: \tunicode: \u2764","emoji_text":"Hello 🌍! How are you 😊? Have a great day 🎉!","mixed_script":"Hello こんにちは World مرحبا 🌍"}
+```
+
+**After (Prettified with 2-space indentation and key sorting):**
+```json
+{
+  "accents": "café résumé naïve façade",
+  "currencies": [
+    "$",
+    "€",
+    "£",
+    "¥",
+    "₹"
+  ],
+  "directional_text": {
+    "arabic": "العربية",
+    "hebrew": "עברית"
+  },
+  "emoji": [
+    "🎉",
+    "🚀",
+    "💻",
+    "🔥"
+  ],
+  "emoji_text": "Hello 🌍! How are you 😊? Have a great day 🎉!",
+  "escape_sequences": "quotes: \"backslash: \\newline: \ntab: \tunicode: ❤",
+  "greeting": "こんにちは世界",
+  "math_symbols": {
+    "degrees": "°C",
+    "infinity": "∞",
+    "omega": "Ω",
+    "pi": "π"
+  },
+  "mixed_script": "Hello こんにちは World مرحبا 🌍",
+  "special_whitespace": "line1\nline2\tindented\rcarriage"
+}
+```
+
+### Example 5: Basic Prettification Comparison
 
 **Before (Ugly):**
 ```json
@@ -186,39 +532,6 @@ This comprehensive report consolidates all testing activities conducted on the J
   "active": true,
   "balance": 1000.5
 }
-```
-
-### Example 2: Key Sorting
-
-**Before (Unsorted):**
-```json
-{"z":"last","a":"first","m":"middle","b":"second"}
-```
-
-**After (Sorted):**
-```json
-{
-  "a": "first",
-  "b": "second",
-  "m": "middle",
-  "z": "last"
-}
-```
-
-### Example 3: Compact Mode
-
-**Before (Formatted):**
-```json
-{
-  "name": "test",
-  "value": 42,
-  "active": true
-}
-```
-
-**After (Compact):**
-```json
-{"name":"test","value":42,"active":true}
 ```
 
 ## 🔧 Error Handling Examples
