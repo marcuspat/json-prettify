@@ -1,7 +1,5 @@
 # JSON Prettify
 
-[![PyPI version](https://badge.fury.io/py/json-prettify.svg)](https://badge.fury.io/py/json-prettify)
-[![Python versions](https://img.shields.io/pypi/pyversions/json-prettify.svg)](https://pypi.org/project/json-prettify/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -115,33 +113,36 @@ json-prettify data.json --sort-keys --indent 4 --stats --output result.json
 
 **With statistics (`--stats`):**
 ```
-JSON Statistics
-┌─────────────────┬────────┐
-│ Objects         │ 1      │
-│ Arrays          │ 1      │
-│ Strings         │ 4      │
-│ Numbers         │ 1      │
-│ Booleans        │ 1      │
-│ Null values     │ 0      │
-│ Total keys      │ 4      │
-│ Max depth       │ 2      │
-│ File size       │ 89 B   │
-└─────────────────┴────────┘
+=== JSON Statistics ===
+Size: 89 bytes
+Maximum depth: 2
+
+Type counts:
+  Objects: 1
+  Arrays: 1
+  Strings: 4
+  Numbers: 1
+  Booleans: 1
+  Nulls: 0
+
+Key statistics:
+  Total keys: 4
+  Unique keys: 4
 ```
 
 ## 🛠️ Command Line Options
 
 | Option | Short | Description |
 |--------|-------|-------------|
-| `--indent` | `-i` | Indentation (2, 4, or 'tab') |
+| `--indent` | `-i` | Number of spaces for indentation (2, 4, or 'tab') (default: 2) |
 | `--sort-keys` | `-s` | Sort object keys alphabetically |
-| `--compact` | `-c` | Output compact JSON |
-| `--validate-only` | `-v` | Only validate, don't format |
-| `--no-color` | | Disable syntax highlighting |
-| `--output` | `-o` | Write to file instead of stdout |
+| `--compact` | `-c` | Output compact JSON (no pretty-printing) |
+| `--validate-only` | `-v` | Only validate JSON, don't format |
+| `--no-color` | | Disable syntax highlighting and colored output |
+| `--output` | `-o` | Write output to file instead of stdout |
 | `--encoding` | `-e` | File encoding (default: utf-8) |
-| `--schema` | | Validate against JSON Schema |
-| `--stats` | | Show JSON statistics |
+| `--schema` | | Validate JSON against a JSON Schema file |
+| `--stats` | | Show JSON statistics (keys, depth, size, etc.) |
 | `--version` | | Show version information |
 | `--help` | | Show help message |
 
@@ -206,40 +207,40 @@ This project uses Poetry for dependency management and follows modern Python dev
 git clone https://github.com/yourusername/json-prettify.git
 cd json-prettify
 
-# Install dependencies
+# Install dependencies with Poetry
 poetry install
 
-# Activate virtual environment
-poetry shell
+# Or use pip to install in development mode
+pip install -e .
 ```
 
 ### Running Tests
 
 ```bash
 # Run test suite
-poetry run pytest
+pytest
 
 # Run with coverage
-poetry run pytest --cov=json_prettify --cov-report=html
+pytest --cov=json_prettify --cov-report=html
 
 # Run specific test file
-poetry run pytest tests/test_cli.py
+pytest tests/test_cli.py
 ```
 
 ### Code Quality
 
 ```bash
 # Format code
-poetry run black json_prettify tests
+black json_prettify tests
 
 # Run linter
-poetry run ruff check json_prettify tests
+ruff check json_prettify tests
 
 # Type checking
-poetry run mypy json_prettify
+mypy json_prettify
 
 # Run all quality checks
-poetry run ruff check . && poetry run black --check . && poetry run mypy json_prettify
+ruff check . && black --check . && mypy json_prettify
 ```
 
 ### Building and Publishing
